@@ -16,11 +16,14 @@
 <script src='viz.js'></script>
 <script src='bfs.js'> </script>
 <script>
-  searcher.init(graph, 0, 3);
+  searcher.init(graph, 0, 10);
   update(graph);
 
-  d3.interval(() => {
-    searcher.step(graph);
+  var interval = d3.interval(() => {
+    if(searcher.step(graph)) {
+      console.log('Search complete.');
+      interval.stop();
+    }
     update(graph);
   }, 1500);
 </script>

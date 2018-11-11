@@ -27,7 +27,7 @@ var searcher = {
           edge.target : edge.source;
         if(!next.visited) {
           if(next === this.target) {
-            done = true;
+            this.done = true;
             return true;
           }
           q.unshift(next);
