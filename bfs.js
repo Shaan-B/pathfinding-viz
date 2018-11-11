@@ -6,29 +6,32 @@ var searcher = {
   q: [],
   done: false,
   init: function(graph, source, target) {
-    this.source = source;
-    this.target = target;
+    this.source = getNode(graph, source);
+    this.target = getNode(graph, target);
 
     getNode(graph, source).type = SOURCE;
     getNode(graph, target).type = TARGET;
 
-    this.q.unshift(source);
+    this.q.unshift(this.source);
   },
   step: function(graph) {
     q = this.q;
-    if(this.done || q.length == 0) return true;
-    x = getNode(graph, q.pop());
+    if(this.done || q.length == 0) { return true; }
+    x = q.pop();
     if(!x.visited) {
       markVisited(x);
 
       adjEdges = getAdjEdges(graph, x);
       adjEdges.forEach((edge) => {
-        if(!edge.visited) {
-          markVisited(edge.target);
-          if(edge === getNode(graph, this.target)) {
-            done = true;
+        var next = edge.source === x ?
+          edge.target : edge.source;
+        if(!next.visited) {
+          if(next === this.target) {
+            this.done = true;
             return true;
           }
+          q.unshift(next);
+          markFrontier(next);
         }
       });
     }
