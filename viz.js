@@ -15,7 +15,7 @@ var simulation = d3.forceSimulation()
       return d.id;
     })
     .distance(50))
-  .force('charge', d3.forceManyBody().strength(-50))
+  .force('charge', d3.forceManyBody().strength(-100))
   .force('center', d3.forceCenter(width / 2, height / 2));
 
 graph = {
@@ -122,6 +122,7 @@ function getColor(d) {
 }
 
 function dragstarted(d) {
+  console.log(d.id);
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
   d.fx = d.x;
   d.fy = d.y;
@@ -150,9 +151,13 @@ function getNode(graph, id) {
   return graph.nodes.filter(node => node.id == id)[0];
 }
 
-function getAdjEdges(graph, node, undirected = false) {
+function getAdjEdges(graph, node, undirected = true) {
   let test = undirected ?
     link => link.source == node :
     link => link.source == node || link.target == node;
   return graph.links.filter(test);
+}
+
+function markFrontier(node) {
+  node.type = FRONTIER;
 }
