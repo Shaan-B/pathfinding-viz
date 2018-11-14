@@ -49,6 +49,11 @@ var node = svg.select('.nodes')
     .on('drag', dragged)
     .on('end', dragended))
 
+node.append('title')
+    .text(function(d) {
+      return d.id;
+    });
+
 var link = svg.select('.links')
   .selectAll('line')
   .data(graph.links)
@@ -61,12 +66,8 @@ function update(graph) {
 
   node
     .data(graph.nodes)
-    .attr('fill', getColor);
-
-  node.append('title')
-    .text(function(d) {
-      return d.id;
-    });
+    .attr('fill', getColor)
+    .attr('stroke', assignStroke);
 
   simulation
     .nodes(graph.nodes)
@@ -121,6 +122,17 @@ function getColor(d) {
   }
 }
 
+function assignStroke(d) {
+  switch (d.stroke) {
+    case SOURCE:
+      return 'lightgreen';
+    case TARGET:
+      return 'lightcoral';
+    default:
+      return 'none';
+  }
+}
+
 function dragstarted(d) {
   console.log(d.id);
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
@@ -141,7 +153,7 @@ function dragended(d) {
 
 // Utility Funtions
 function markVisited(node) {
-  if(node.type != SOURCE && node.type != TARGET) {
+  if(node.type != SOURCE) {
     node.type = VISITED;
   }
   node.visited = true;
@@ -153,8 +165,8 @@ function getNode(graph, id) {
 
 function getAdjEdges(graph, node, undirected = true) {
   let test = undirected ?
-    link => link.source == node :
-    link => link.source == node || link.target == node;
+    link => link.source == node || link.target == node :
+    link => link.source == node;
   return graph.links.filter(test);
 }
 

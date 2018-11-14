@@ -5,12 +5,17 @@ var searcher = {
   target: -1,
   q: [],
   done: false,
-  init: function(graph, source, target) {
+  init: function(graph, source, target=null) {
     this.source = getNode(graph, source);
-    this.target = getNode(graph, target);
+    this.source.type = SOURCE;
+    this.source.stroke = SOURCE;
 
-    getNode(graph, source).type = SOURCE;
-    getNode(graph, target).type = TARGET;
+    if(target) {
+      this.target = getNode(graph, target);
+      this.target.type = TARGET;
+      this.target.stroke = TARGET;
+    }
+    else this.target = null;
 
     this.q.unshift(this.source);
   },
@@ -20,20 +25,24 @@ var searcher = {
     x = q.pop();
     if(!x.visited) {
       markVisited(x);
+      if(this.target && x === this.target) {
+        this.done = true;
+        return true;
+      }
 
       adjEdges = getAdjEdges(graph, x);
       adjEdges.forEach((edge) => {
         var next = edge.source === x ?
           edge.target : edge.source;
         if(!next.visited) {
-          if(next === this.target) {
-            this.done = true;
-            return true;
-          }
           q.unshift(next);
           markFrontier(next);
         }
       });
+    }
+    else {
+      //Keep animation speed constant
+      this.step(graph);
     }
     return false;
   }
