@@ -133,22 +133,37 @@ function assignStroke(d) {
   }
 }
 
+let frozen = false;
+
 function dragstarted(d) {
   console.log(d.id);
-  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
+  if(!frozen) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
 }
 
 function dragged(d) {
-  d.fx = d3.event.x;
-  d.fy = d3.event.y;
+  if(!frozen) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+  }
 }
 
 function dragended(d) {
   if (!d3.event.active) simulation.alphaTarget(0);
   d.fx = null;
   d.fy = null;
+}
+
+function freeze() {
+  frozen = true;
+  simulation.alphaTarget(0);
+}
+
+function unfreeze() {
+  frozen = false;
 }
 
 // Utility Funtions
