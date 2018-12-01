@@ -188,3 +188,10 @@ function getAdjEdges(graph, node, undirected = true) {
 function markFrontier(node) {
   node.type = FRONTIER;
 }
+
+function resetGraph() {
+  graph.nodes.forEach((node) => {
+    node.type = NONE,
+    node.visited = false
+  });
+}
