@@ -31,6 +31,12 @@
       <button type='button' class='btn btn-secondary' onclick='finish()'>Auto-Finish</button>
     </div>
   </div>
+  <div class = 'row'>
+      <p class='text-center' id='visited'></p>
+  </div>
+  <div class = 'row'>
+      <p class ='text-center' id = 'frontier'></p>
+  </div>
 </div>
 
 <script src='https://d3js.org/d3.v4.min.js'></script>
@@ -63,14 +69,18 @@
 
   // Map
   setSearch(2, 12);
-  
+
   function changeSearcher(generator) {
     if(generator === aStar) {
       document.getElementById('title').innerText = 'A* Search'
+      document.getElementById('visited').innerText = 'Visited Nodes: NULL';
+      document.getElementById('frontier').innerText = 'Frontier Nodes: NULL';
       freeze();
     }
     else {
       document.getElementById('title').innerText = 'Breadth First Search';
+      document.getElementById('visited').innerText = 'Visited Nodes: NULL';
+      document.getElementById('frontier').innerText = 'Frontier Nodes: NULL';
       unfreeze();
     }
     resetGraph();
@@ -84,6 +94,18 @@
   function doStep() {
     searcher.step(graph);
     update(graph);
+    var visited = [];
+    var frontier = [];
+    for (let i = 0; i < graph.nodes.length; i++) {
+      if (graph.nodes[i].type == VISITED) {
+          visited.push(i);
+      }
+      if (graph.nodes[i].type == FRONTIER) {
+          frontier.push(i);
+      }
+    }
+    document.getElementById('visited').innerText = 'Visited Nodes: ' + visited.toString();
+    document.getElementById('frontier').innerText = 'Frontier Nodes: ' + frontier.toString();
   }
 
   function finish() {
@@ -93,6 +115,18 @@
         interval.stop();
       }
       update(graph);
+      var visited = [];
+      var frontier = [];
+      for (let i = 0; i < graph.nodes.length; i++) {
+        if (graph.nodes[i].type == VISITED) {
+            visited.push(i);
+        }
+        if (graph.nodes[i].type == FRONTIER) {
+            frontier.push(i);
+        }
+      }
+      document.getElementById('visited').innerText = 'Visited Nodes: ' + visited.toString();
+      document.getElementById('frontier').innerText = 'Frontier Nodes: ' + frontier.toString();
     },  500);
   }
 </script>
