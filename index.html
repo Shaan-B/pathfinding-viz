@@ -19,6 +19,9 @@
       <button type='button' class='btn btn-primary' onclick='changeSearcher(bfs);'>Breadth First Search</button>
     </div>
     <div class='col-sm' align='center'>
+      <button type='button' class='btn btn-primary' onclick='changeSearcher(dijkstra);'>Dijkstra</button>
+    </div>
+    <div class='col-sm' align='center'>
       <button type='button' class='btn btn-primary' onclick='changeSearcher(aStar);'>A* Search</button>
     </div>
   </div>
@@ -43,6 +46,7 @@
 <script src='viz.js'></script>
 <script src='bfs.js'></script>
 <script src='aStar.js'></script>
+<script src='dijkstra.js'></script>
 <script>
   let source; let target;
   function setSearch(s, t) { source=s; target=t; }
@@ -65,8 +69,8 @@
   setSearch(2, 12);
   
   function changeSearcher(generator) {
-    if(generator === aStar) {
-      document.getElementById('title').innerText = 'A* Search'
+    if(generator === aStar || generator === dijkstra) {
+      document.getElementById('title').innerText = generator === aStar ? 'A* Search' : 'Dijkstra';
       freeze();
     }
     else {

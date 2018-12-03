@@ -40,9 +40,10 @@ graphEncoding.edges.forEach((edge) => {
 });
 
 var node = svg.select('.nodes')
-  .selectAll('circle')
+  .selectAll('g')
   .data(graph.nodes)
-  .enter().append('circle')
+  .enter()
+  .append('circle')
   .attr('r', 5)
   .call(d3.drag()
     .on('start', dragstarted)
@@ -50,6 +51,17 @@ var node = svg.select('.nodes')
     .on('end', dragended))
 
 node.append('title')
+    .text(function(d) {
+      return d.id;
+    });
+
+var text = svg.select('.nodes')
+    .selectAll('text')
+    .data(graph.nodes)
+    .enter()
+    .append('text')
+    .attr("x", function(d) { return d.x; })
+    .attr("y", function(d) { return d.y; })
     .text(function(d) {
       return d.id;
     });
